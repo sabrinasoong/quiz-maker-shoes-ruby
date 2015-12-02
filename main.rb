@@ -1,25 +1,38 @@
 require 'green_shoes'
+require 'yaml'
 Shoes.app :title => 'parent', :width => 800, :height => 600 do
   
   background aliceblue
   para "What would you like to do", align: "center"
   button("Create a new quiz"){@w = create_new_quiz}  
-  button("Play an existing quiz"){@w = play_quiz}  
-  button("Change settings"){@w = settings}
   button("Load Quiz"){@w = load_quiz}
+  button("Change settings"){@w = settings} 
   button("Exit"){@w = exit} 
   def load_quiz
-    window  :title => 'Load Quiz', :width => 800, :height => 600 do
-      button('parent'){owner.hello green}
-      button('child'){owner.hello green, self}
+    window :title => 'Load A Quiz', :width => 800, :height => 600 do
+      background aliceblue
+    
+      para 'What is your quiz name?'
+      file_name = edit_line
+      button('ok'){
+        if File.exists?("./#{file_name.text}.yml")
+          alert = "Cool"
+          play_quiz
+        else
+          alert "There's no quiz with that name!"
+          @w = owner
+        end
+        }      
+      
     end
   end
   
   def play_quiz
     window :title => 'Play Quiz', :width => 800, :height => 600 do
       background aliceblue
-      para link("Load A Quiz") { window "/load_quiz" }
-      file = YAML::load_file("./{file_name.text}")
+      
+      alert "#{file_name.text} quiz can be played now!"
+      @w = owner
     end
   end
   
@@ -34,7 +47,7 @@ Shoes.app :title => 'parent', :width => 800, :height => 600 do
         unless File.exists?("./#{file_name.text}.yml")
           File.new("./#{file_name.text}.yml", "w+")
           alert "#{file_name.text} has been created!"
-          @w = play_quiz
+          @w = owner
         else
           alert "You've already got a quiz with that name!"
           @w = owner
@@ -59,6 +72,9 @@ def settings
     Kernel.exit
   end
     
-  
+def my_yml_loader(file_name)
+  YAML::load("./#{file_name.text}.yml")
+end
+
 
 end
