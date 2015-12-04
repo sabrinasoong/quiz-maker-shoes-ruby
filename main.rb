@@ -19,12 +19,12 @@ Shoes.app :title => 'parent', :width => 800, :height => 600 do
     end
     
     stack :width => 250, :height => 120 do
-      button("Play Quiz", width: 1.0, height: 1.0){@w = load_quiz}
+      button("Play Quiz", width: 1.0, height: 1.0){@w = question_loader}
     end
     
-    stack :width => 250, :height => 120 do
-      button("Play Loaded Quiz", width: 1.0, height: 1.0){@w = play_loaded_quiz}
-    end
+  #  stack :width => 250, :height => 120 do
+    #  button("Play Loaded Quiz", width: 1.0, height: 1.0){@w = play_loaded_quiz}
+   # end
     stack :width => 250, :height => 120 do
       button("Change settings", width: 1.0, height: 1.0){@w = settings} 
     end
@@ -35,25 +35,26 @@ Shoes.app :title => 'parent', :width => 800, :height => 600 do
     
   end 
   
-  def load_quiz
-    window :title => 'Load A Quiz', :width => 800, :height => 600 do
+  def load_quiz    
+    @quiz_file = Nokogiri::XML(File.open("sample.xml"))
+    # write the xml string generated above to the file
+    quiz = @quiz_file.xpath("//quiz").text
+    @quiz_file.remove_namespaces!
+   # puts ron
+    window :title => 'Quiz Game', :width => 800, :height => 600 do
       background springgreen
-
-      para 'What is your quiz name?'
-      file_name = edit_line
-      button('ok'){
-        unless File.exists?("./#{file_name.text}.xml")
-          alert "There's no quiz with that name!"
-          @w = owner
-          #play_quiz
-        else
-          alert = "Cool"
-          @w.clear = play_loaded_quiz
-          para ron
-          
+      puts quiz
+        para 'What is your quiz name?'
+        file_name = edit_line
+        button'ok' do
+          unless File.exists?("./#{file_name.text}.xml")
+            alert "There's no quiz with that name!"
+            @w = owner
+            #play_quiz
+          else
+            alert quiz
         end
-        }      
-      
+        end
     end
   end
   
@@ -164,23 +165,11 @@ def settings
  # end
   
   def play_loaded_quiz
-    @lol = Nokogiri::XML(File.open("sample.xml"))
-    # write the xml string generated above to the file
-    ron = @lol.xpath("//quiz").text
-    @lol.remove_namespaces!
-   # puts ron
-    window :title => 'Quiz Game', :width => 800, :height => 600 do
+    window :title => 'Play Quiz', :width => 800, :height => 600 do
       background springgreen
-      puts ron
-        para 'What is your quiz name?'
-        file_name = edit_line
-        button'ok' do
-          if ron == nil 
-            alert "its nil"
-          else 
-            alert "#{ron} How devious"
-          end
-        end
+      
+      alert "#{file_name.text} quiz can be played now!"
+      @w = owner
     end
   end
 
@@ -193,9 +182,82 @@ def settings
     
   end
   
-  
+  def init_game
+    @score = 0
+    @question = 1
+    
+    
+    
+  end
+  def puts str
+    @q.push proc{
+     @slot.append{para str}
+      @slot.scroll_top = @slot.scroll_max
+    }
+    end
 
+  def question_loader
+    window :title => 'Quiz Game', :width => 800, :height => 600 do
+    background springgreen
+    #blk = proc do |question|
+      
+      @quiz_file = Nokogiri::XML(File.open("sample.xml"))
+      # write the xml string generated above to the file
+      @i = rand(1..3)
+      full_quiz = @quiz_file.xpath("//quiz").text
+      question = @quiz_file.xpath("//question#{@i}/question").text
+      wrong_answers = @quiz_file.xpath("//questions#{@i}/question/wrong_answer").text
+      correct_answer = @quiz_file.xpath("//questions#{@i}/correct_answer").text
+      @quiz_file.remove_namespaces!
+      
+      
+     # stack do
+     #   background aliceblue, height: 25
+     #   caption "Quiz Game", align: "center"
+      #end
+  
+      @slot = stack :height => "50%" do 
+        para "Question"
+        para question
+                 
+       # para quizzing
+      end
+    end
+  end
+    
+    def helper_init
+    @q = []
+
+    e = animate do |i|
+      if @q.empty?
+        e.stop
+      else
+        case q = @q.shift
+        when :nothing
+        when :stop
+          if @key
+            @input.text = @key
+            @answer, @key = @key, nil
+          else
+            @q.unshift :stop
+          end
+        when :prompt
+          @slot.append{flow{para '> '; @input = para '', stroke: red}}
+	  @slot.scroll_top = @slot.scroll_max
+          @q.unshift :stop
+        else
+          q.is_a?(Array) ? q.first[@answer] : q.call
+        end
+      end
+    end
+
+    keypress{|k| @key = k}
+  end
+  
+  
 end
+
+
 
 #possible solution to creating a new file
 #  flow do
