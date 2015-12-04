@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<quiz>
+  <question1>
+    <question>What is 100 x 100?</question>
+    <wrong_answer>100</wrong_answer>
+    <wrong_answer>1000</wrong_answer>
+    <wrong_answer>10</wrong_answer>
+    <wrong_answer>12</wrong_answer>
+    <correct_answer>10000</correct_answer>
+  </question1>
+  <question2>
+  <question>What is 4 + 5?</question>
+    <wrong_answer>10</wrong_answer>
+    <wrong_answer>11</wrong_answer>
+    <wrong_answer>18</wrong_answer>
+    <wrong_answer>2</wrong_answer>
+    <correct_answer>9</correct_answer>  
+  </question2>
+  <question3>
+    <question>What is 12 x 30?</question>
+    <wrong_answer>1223</wrong_answer>
+    <wrong_answer>14342</wrong_answer>
+    <wrong_answer>23</wrong_answer>
+    <wrong_answer>1230</wrong_answer>
+    <correct_answer>360</correct_answer>
+  </question3>
+</quiz>
