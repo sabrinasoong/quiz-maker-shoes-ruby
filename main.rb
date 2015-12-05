@@ -19,7 +19,7 @@ Shoes.app :title => 'parent', :width => 800, :height => 600 do
     end
     
     stack :width => 250, :height => 120 do
-      button("Play Quiz", width: 1.0, height: 1.0){@w = question_loader}
+      button("Play Quiz", width: 1.0, height: 1.0){@w = question_time}
     end
     
   #  stack :width => 250, :height => 120 do
@@ -160,10 +160,6 @@ def settings
     Kernel.exit
   end
     
-  #def my_yml_loader(file_name)
-  #  YAML.load_file("./#{file_name.text}.yml")
- # end
-  
   def play_loaded_quiz
     window :title => 'Play Quiz', :width => 800, :height => 600 do
       background springgreen
@@ -195,88 +191,71 @@ def settings
       @slot.scroll_top = @slot.scroll_max
     }
     end
-
-  def question_loader
-    window :title => 'Quiz Game', :width => 800, :height => 600 do
-    background springgreen
-    #blk = proc do |question|
+    
+    def question_loader
+      alert "Donkey"    
+    end
+    
+      def question_time
+    window :title => 'Quiz Game', :width => 800, :height => 600, :fill => "#DADED1" do
+    background "#DADED1"      
+    @quiz_file = Nokogiri::XML(File.open("sample.xml"))
+      #Question Randomiser
+    @i = rand(1..3)
+    full_quiz = @quiz_file.xpath("//quiz").text
+    question = @quiz_file.xpath("//question#{@i}/question").text
+    @quiz_file.remove_namespaces!
+    @score = 0
       
-      @quiz_file = Nokogiri::XML(File.open("sample.xml"))
-      # write the xml string generated above to the file
-      @i = rand(1..3)
-      full_quiz = @quiz_file.xpath("//quiz").text
-      question = @quiz_file.xpath("//question#{@i}/question").text
+    flow height: 25 do
+      background "#DEC5CF"
+      para "Score: #{@score}", align: "right"
+    end
+   
+    @slot = stack margin: 10, :width => "70%" do 
+      background "#DADED1"
+      para "Question"
+      para question
+    end
+    
+      #Answer Randomiser
+      wrong_answer_1 = @quiz_file.xpath("//question#{@i}/wrong_answer#{@i}.#{1}").text
+      wrong_answer_2 = @quiz_file.xpath("//question#{@i}/wrong_answer#{@i}.#{2}").text
+      wrong_answer_3 = @quiz_file.xpath("//question#{@i}/wrong_answer#{@i}.#{3}").text
+      wrong_answer_4 = @quiz_file.xpath("//question#{@i}/wrong_answer#{@i}.#{4}").text
+      correct_answer = @quiz_file.xpath("//question#{@i}/correct_answer#{@i}").text
       @quiz_file.remove_namespaces!
       
+      answers = Array.new
+      answers << wrong_answer_1
+      answers << wrong_answer_2
+      answers << wrong_answer_3
+      answers << wrong_answer_4
+      answers << correct_answer
       
-     stack height: 25 do
-       background green
-        para "Quiz Game", align: "center"
+      randomised_answers = answers.shuffle
+      stack :width => "15%" do
+      #empty
       end
-  
-      @slot = stack do 
-        background springgreen
-        para "Question"
-        para question
+      stack margin: 10 do
+        randomised_answers.each { |x| para x }
       end
-      
-      wrong_answers = @quiz_file.xpath("//wrong_answer").text
-      correct_answer = @quiz_file.xpath("//correct_answer").text
-
-      @quiz_file.remove_namespaces!
-      stack do
-        para wrong_answers
-        para correct_answer
-      end
-      
+      #Get user's answer
       stack do
         answer = edit_line
-        if answer.text == ""
+        button "OK" do
+          if answer.text == nil
           alert "Please enter your answer!"
+            @w = owner
         elsif answer.text == correct_answer
-          @score +=1
-          question_loader
+          #@score +=1
+            alert "Correct!"
         else
-         # alert "Wrong answer!"
+            alert "Wrong answer!"
+        end
         end
       end
     end
-  end
-    
-    def helper_init
-    @q = []
-
-    e = animate do |i|
-      if @q.empty?
-        e.stop
-      else
-        case q = @q.shift
-        when :nothing
-        when :stop
-          if @key
-            @input.text = @key
-            @answer, @key = @key, nil
-          else
-            @q.unshift :stop
-          end
-        when :prompt
-          @slot.append{flow{para '> '; @input = para '', stroke: red}}
-	  @slot.scroll_top = @slot.scroll_max
-          @q.unshift :stop
-        else
-          q.is_a?(Array) ? q.first[@answer] : q.call
-        end
-      end
-    end
-
-    keypress{|k| @key = k}
-  end
-  
-  def puts str
-    @q.push proc{
-      @slot.append{para str}
-      @slot.scroll_top = @slot.scroll_max
-    }
   end
 end
 

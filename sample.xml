@@ -3,26 +3,26 @@
 <quiz>
   <question1>
     <question>What is 100 x 100?</question>
-    <wrong_answer>100</wrong_answer>
-    <wrong_answer>1000</wrong_answer>
-    <wrong_answer>10</wrong_answer>
-    <wrong_answer>12</wrong_answer>
-    <correct_answer>10000</correct_answer>
+    <wrong_answer1.1>100</wrong_answer1.1>
+    <wrong_answer1.2>1000</wrong_answer1.2>
+    <wrong_answer1.3>10</wrong_answer1.3>
+    <wrong_answer1.4>12</wrong_answer1.4>
+    <correct_answer1>10000</correct_answer1>
   </question1>
   <question2>
   <question>What is 4 + 5?</question>
-    <wrong_answer>10</wrong_answer>
-    <wrong_answer>11</wrong_answer>
-    <wrong_answer>18</wrong_answer>
-    <wrong_answer>2</wrong_answer>
-    <correct_answer>9</correct_answer>  
+    <wrong_answer2.1>10</wrong_answer2.1>
+    <wrong_answer2.2>11</wrong_answer2.2>
+    <wrong_answer2.3>18</wrong_answer2.3>
+    <wrong_answer2.4>2</wrong_answer2.4>
+    <correct_answer2>9</correct_answer2>  
   </question2>
   <question3>
     <question>What is 12 x 30?</question>
-    <wrong_answer>1223</wrong_answer>
-    <wrong_answer>14342</wrong_answer>
-    <wrong_answer>23</wrong_answer>
-    <wrong_answer>1230</wrong_answer>
-    <correct_answer>360</correct_answer>
+    <wrong_answer3.1>1223</wrong_answer3.1>
+    <wrong_answer3.2>14342</wrong_answer3.2>
+    <wrong_answer3.3>23</wrong_answer3.3>
+    <wrong_answer3.4>1230</wrong_answer3.4>
+    <correct_answer3>360</correct_answer3>
   </question3>
 </quiz>
