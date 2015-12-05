@@ -206,21 +206,39 @@ def settings
       @i = rand(1..3)
       full_quiz = @quiz_file.xpath("//quiz").text
       question = @quiz_file.xpath("//question#{@i}/question").text
-      wrong_answers = @quiz_file.xpath("//questions#{@i}/question/wrong_answer").text
-      correct_answer = @quiz_file.xpath("//questions#{@i}/correct_answer").text
       @quiz_file.remove_namespaces!
       
       
-     # stack do
-     #   background aliceblue, height: 25
-     #   caption "Quiz Game", align: "center"
-      #end
+     stack height: 25 do
+       background green
+        para "Quiz Game", align: "center"
+      end
   
-      @slot = stack :height => "50%" do 
+      @slot = stack do 
+        background springgreen
         para "Question"
         para question
-                 
-       # para quizzing
+      end
+      
+      wrong_answers = @quiz_file.xpath("//wrong_answer").text
+      correct_answer = @quiz_file.xpath("//correct_answer").text
+
+      @quiz_file.remove_namespaces!
+      stack do
+        para wrong_answers
+        para correct_answer
+      end
+      
+      stack do
+        answer = edit_line
+        if answer.text == ""
+          alert "Please enter your answer!"
+        elsif answer.text == correct_answer
+          @score +=1
+          question_loader
+        else
+         # alert "Wrong answer!"
+        end
       end
     end
   end
@@ -254,7 +272,12 @@ def settings
     keypress{|k| @key = k}
   end
   
-  
+  def puts str
+    @q.push proc{
+      @slot.append{para str}
+      @slot.scroll_top = @slot.scroll_max
+    }
+  end
 end
 
 
