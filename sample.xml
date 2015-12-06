@@ -25,4 +25,20 @@
     <wrong_answer3.4>1230</wrong_answer3.4>
     <correct_answer3>360</correct_answer3>
   </question3>
+  <question4>
+    <question>How many sides are there on a rectangle?</question>
+    <wrong_answer4.1>2</wrong_answer4.1>
+    <wrong_answer4.2>3</wrong_answer4.2>
+    <wrong_answer4.3>5</wrong_answer4.3>
+    <wrong_answer4.4>6</wrong_answer4.4>
+    <correct_answer4>4</correct_answer4>
+  </question4>
+  <question5>
+  <question>What is the square root of 36</question>
+    <wrong_answer5.1>5</wrong_answer5.1>
+    <wrong_answer5.2>8</wrong_answer5.2>
+    <wrong_answer5.3>7</wrong_answer5.3>
+    <wrong_answer5.4>9</wrong_answer5.4>
+    <correct_answer5>6</correct_answer5>
+  </question5>
 </quiz>

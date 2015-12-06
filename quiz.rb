@@ -70,8 +70,6 @@ Shoes.app :title => 'parent', :width => 800, :height => 600 do
   def create_new_quiz
     window :title => 'Create A New Quiz', :width => 800, :height => 600 do
       background springgreen
-
- #   stack do
       
       para 'What is your quiz name?'
       file_name = edit_line
@@ -177,14 +175,7 @@ def settings
     end
     
   end
-  
-  def init_game
-    @score = 0
-    @question = 1
-    
-    
-    
-  end
+
   def puts str
     @q.push proc{
      @slot.append{para str}
@@ -201,7 +192,7 @@ def settings
     background "#DADED1"      
     @quiz_file = Nokogiri::XML(File.open("sample.xml"))
       #Question Randomiser
-    @i = rand(1..3)
+    @i = rand(1..5)
     full_quiz = @quiz_file.xpath("//quiz").text
     question = @quiz_file.xpath("//question#{@i}/question").text
     @quiz_file.remove_namespaces!
@@ -234,11 +225,10 @@ def settings
       answers << correct_answer
       
       randomised_answers = answers.shuffle
-      stack :width => "15%" do
-      #empty
-      end
       stack margin: 10 do
-        randomised_answers.each { |x| para x }
+        randomised_answers.each_with_index do |item, i|
+          para "#{i+1}. #{item}"
+        end
       end
       #Get user's answer
       stack do
@@ -258,6 +248,7 @@ def settings
     end
   end
 end
+
 
 
 
